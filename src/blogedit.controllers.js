@@ -39,7 +39,7 @@ angular
         };
         // determine if the current page is the last page of the result list
         $scope.isLastPage = function () {
-            return $blogEdit.getCurrentPageNo() === $blogView.getPageCount();
+            return $blogEdit.getCurrentPageNo() === $blogEdit.getPageCount();
         };
         $scope.getFormattedDate = function (pBlog) {
             return $blogEdit.parseFileName(pBlog.fileName).formattedDate;
@@ -56,7 +56,7 @@ angular
             });
         };
     }])
-    .controller('BlogEditPostCtrl', ['$scope', '$http', '$stateParams', '$blogView', function ($scope, $http, $stateParams) {
+    .controller('BlogEditPostCtrl', ['$scope', '$http', '$stateParams', '$blogEdit', function ($scope, $http, $stateParams, $blogEdit) {
 
         var year = $stateParams.year,
             month = $stateParams.month,
@@ -102,15 +102,15 @@ angular
             });
         }
     }])
-    .controller('BlogViewPostSideCtrl', [function () {
+    .controller('BlogEditPostSideCtrl', [function () {
 
     }])
-    .controller('BlogViewCtrl', ['$blogView', '$scope', '$state', function ($blogView, $scope, $state) {
+    .controller('BlogEditCtrl', ['$blogEdit', '$scope', '$state', function ($blogEdit, $scope, $state) {
         // needed for ui select
         $scope.queryTag = {};
 
         // loads tags
-        $blogView.getTags (function (data) {
+        $blogEdit.getTags (function (data) {
             $scope.tags = data;
         });
 

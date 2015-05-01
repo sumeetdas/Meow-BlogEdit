@@ -3,7 +3,7 @@
  */
 angular
     .module('meow.blog.edit')
-    .service('$blogEdit', [function () {
+    .service('$blogEdit', ['$http', function ($http) {
         var currentPageNo = 1, pageCount = 1, blogsPerPage = 5, pageBlogList = [], tags = [],
             currentBlog = '';
 

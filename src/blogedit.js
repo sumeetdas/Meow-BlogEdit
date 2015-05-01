@@ -2,13 +2,13 @@
  * Created by sumedas on 31-Mar-15.
  */
 angular
-    .module('meow.blog.edit',[])
+    .module('meow.blog.edit',['ui.router', 'blogEditTemplates', 'ngSanitize', 'ui.select', 'hc.marked', 'toggle-switch'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
             .state('blog', {
                 abstract: true,
                 views: {
-                    blogView: {
+                    blogEdit: {
                         controller: 'BlogEditCtrl',
                         templateUrl: 'blog-edit.base.tpl.html'
                     }

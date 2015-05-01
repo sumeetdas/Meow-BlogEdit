@@ -19,8 +19,8 @@
         <div post="blog.post"></div>
     </div>
 
-    <ui-select multiple tagging tagging-label="New Tag" ng-model="blog.tags" theme="select2" ng-disabled="disabled" style="width: 300px;">
-        <ui-select-match placeholder="Select colors...">{{$item}}</ui-select-match>
+    <ui-select multiple tagging tagging-label="(New Tag)" ng-model="blog.tags" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+        <ui-select-match placeholder="Select tag">{{$item}}</ui-select-match>
         <ui-select-choices repeat="color in availableColors | filter:$select.search">
             {{color}}
         </ui-select-choices>
