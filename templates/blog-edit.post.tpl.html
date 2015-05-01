@@ -1,0 +1,31 @@
+<div>
+    <h1>{{blog.title}}</h1>
+
+    <div>
+        <toggle-switch ng-model="editMode" knob-label="Edit"></toggle-switch>
+        <div class="pull-right">
+            <i class="fa fa-undo" ng-click="revertEdit()"></i>
+            <i class="fa fa-remove" ng-click="deleteBlog()"></i>
+            <i class="fa fa-save" ng-click="saveBlog()"></i>
+        </div>
+    </div>
+
+
+    <div ng-if="editMode">
+        <textarea ng-model="blog.post"></textarea>
+    </div>
+
+    <div ng-if="!editMode">
+        <div post="blog.post"></div>
+    </div>
+
+    <ui-select multiple tagging tagging-label="New Tag" ng-model="blog.tags" theme="select2" ng-disabled="disabled" style="width: 300px;">
+        <ui-select-match placeholder="Select colors...">{{$item}}</ui-select-match>
+        <ui-select-choices repeat="color in availableColors | filter:$select.search">
+            {{color}}
+        </ui-select-choices>
+    </ui-select>
+
+    <i class="fa fa-tags"></i> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tag/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em>
+
+</div>

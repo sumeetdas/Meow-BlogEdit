@@ -1,0 +1,28 @@
+<div>
+    <div ng-repeat="blog in blogs">
+        <div class="post-preview" ng-if="blogs">
+            <a href="#" ng-click="goToBlog(blog);">
+                <h2 class="post-title">
+                    {{blog.title}}
+                </h2>
+                <h3 class="post-subtitle" ng-if="blog.subtitle">
+                    {{blog.subtitle}}
+                </h3>
+            </a>
+            <div class="post-meta">Posted by <a ng-href="/#/blogs">{{username}}</a> on {{getFormattedDate(blog)}}</div>
+            <div class="post-meta"><i class="fa fa-tags"></i> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tag/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
+        </div>
+        <div class="post-preview" ng-if="blogs === [] || !blogs">
+            <h2>No blogs found saaaaaar!</h2>
+        </div>
+        <hr>
+    </div>
+    <ul class="pager">
+        <li class="previous">
+            <a href="#" ng-if="!isFirstPage()" ng-click="prev()">Previous</a>
+        </li>
+        <li class="next">
+            <a href="#" ng-if="!isLastPage()" ng-click="next()">Next</a>
+        </li>
+    </ul>
+</div>
