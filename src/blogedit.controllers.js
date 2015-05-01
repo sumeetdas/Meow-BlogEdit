@@ -44,11 +44,11 @@ angular
         $scope.getFormattedDate = function (pBlog) {
             return $blogEdit.parseFileName(pBlog.fileName).formattedDate;
         };
-        // function to go to blog.view state when the title is clicked upon
+        // function to go to blog.edit state when the title is clicked upon
         $scope.goToBlog = function (pBlog) {
             var metaData = $blogEdit.parseFileName(pBlog.fileName);
 
-            $state.go('blog.view', {
+            $state.go('blog.edit', {
                 year: metaData.year,
                 month: metaData.month,
                 date: metaData.date,
