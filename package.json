@@ -1,0 +1,35 @@
+{
+  "name": "Meow-BlogEditor",
+  "version": "0.0.1",
+  "description": "Blog editor for Meow blogging engine",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "meow",
+    "blog",
+    "editor",
+    "angularjs"
+  ],
+  "author": "Sumeet Das <sumeetdas1992@gmail.com> (http://sumeetdas.me/)",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-angular-templatecache": "^1.6.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-less": "^3.0.3",
+    "gulp-uglify": "^1.1.0",
+    "gulp-watch": "^4.2.4",
+    "run-sequence": "^1.0.2"
+  },
+  "dependencies": {
+    "express": "^4.13.1",
+    "meow-blog": "0.0.1"
+  }
+}

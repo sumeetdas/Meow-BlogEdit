@@ -51,14 +51,13 @@ gulp.task('build-bundle', function () {
 gulp.task('build-combo-bundle', function () {
     return gulp
         .src([
-            'bower_components/jquery/dist/jquery.js',
+            'bower_components/js-yaml/dist/js-yaml.js',
             'bower_components/angular/angular.js',
+            'bower_components/angular-route/angular-route.js',
             'bower_components/marked/lib/marked.js',
             'bower_components/angular-marked/angular-marked.min.js',
             'bower_components/angular-sanitize/angular-sanitize.js',
-            'bower_components/angular-ui-router/release/angular-ui-router.js',
-            'bower_components/angular-ui-select/dist/select.js',
-            'bower_components/angular-toggle-switch/angular-toggle-switch.min.js',
+            'bower_components/angular-morph/dist/angular-morph.js',
             'dist/blogedit.js'])
         .pipe(concat('blogedit.combo.js'))
         .pipe(gulp.dest('dist'));
@@ -68,8 +67,6 @@ gulp.task('build-combo-css-bundle', function () {
     return gulp
         .src([
             'bower_components/bootstrap-css-only/css/bootstrap.css',
-            'bower_components/angular-ui-select/dist/select.css',
-            'bower_components/angular-toggle-switch/angular-toggle-switch-bootstrap.css',
             'dist/*.css'
         ])
         .pipe(concat('blogedit.combo.css'))
@@ -84,7 +81,7 @@ gulp.task('default', function () {
 
 gulp.task('combo', function () {
     runSequence('clean', 'build-templates', 'build-less', 'build-src', 'build-combo-bundle', 'build-combo-css-bundle', function () {
-        exec('cp ~/Meow-BlogEditor/dist/* ~/Meow-Github/public');
+        exec('cp C:/Users/sumedas/Meow-BlogEdit/dist/* C:/Users/sumedas/Meow-BlogEdit/public');
         console.log('gulp tasks done!');
     });
 });

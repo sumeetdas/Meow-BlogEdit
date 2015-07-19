@@ -4,8 +4,116 @@
 angular
     .module('meow.blog.edit')
     .service('$blogEdit', ['$http', function ($http) {
-        var currentPageNo = 1, pageCount = 1, blogsPerPage = 5, pageBlogList = [], tags = [],
-            currentBlog = '';
+        var currentPageNo = 1, pageCount = 1, pageBlogList = [];
+
+        var tags = [], months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                                 'August', 'September', 'October', 'November', 'December'];
+
+        function computePageCount (pBlogsPerPage) {
+
+            if (!pBlogsPerPage) {
+                pBlogsPerPage = 1;
+            }
+            else if (typeof pBlogsPerPage === 'string') {
+                try {
+                    pBlogsPerPage = parseInt(pBlogsPerPage);
+                } catch (pErr) {
+                    pBlogsPerPage = 1;
+                }
+            }
+            else if (typeof pBlogsPerPage !== 'number')
+            {
+                pBlogsPerPage = 1;
+            }
+
+            var len = pageBlogList.length;
+            return !!len ? parseInt (len / pBlogsPerPage) + (len % pBlogsPerPage === 0 ? 0 : 1) : 1;
+        }
+
+        function getBlogsByTag (pTag, pCallBack, pBlogsPerPage) {
+            $http
+                .get('/api/blogs/tags/' + pTag)
+                .success(function (data) {
+                    pageBlogList = data;
+                    pageCount = computePageCount(pBlogsPerPage);
+                    currentPageNo = 1;
+                    if (typeof pCallBack === 'function') {
+                        pCallBack (pageBlogList.slice(0, pBlogsPerPage));
+                    }
+                })
+                .error(console.error);
+        }
+
+        function getBlogsByQuery (pQuery, pCallBack, pBlogsPerPage) {
+            $http
+                .get('/api/blogs/query/' + pQuery)
+                .success(function (data) {
+                    pageBlogList = data;
+                    pageCount = computePageCount(pBlogsPerPage);
+                    currentPageNo = 1;
+                    if (typeof pCallBack === 'function') {
+                        pCallBack (pageBlogList.slice(0, pBlogsPerPage));
+                    }
+                })
+                .error(console.error);
+        }
+
+        function getBlogs (pCallBack, pBlogsPerPage) {
+            $http
+                .get('/api/blogs')
+                .success(function (data) {
+                    pageBlogList = data;
+                    pageCount = computePageCount(pBlogsPerPage);
+                    currentPageNo = 1;
+                    if (typeof pCallBack === 'function') {
+                        pCallBack (pageBlogList.slice(0, pBlogsPerPage));
+                    }
+                })
+                .error(console.error);
+        }
+
+        function getBlog (pBlog, pCallBack) {
+            $http
+                .get('/api/blogs/posts/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug)
+                .success(function (pData) {
+                    pCallBack(pData);
+                })
+                .error(console.error);
+        }
+
+        function getPrevBlogs (pCallBack, pBlogsPerPage) {
+            if (currentPageNo > 1) {
+                currentPageNo = currentPageNo - 1;
+                pCallBack (pageBlogList.slice( (currentPageNo - 1) * pBlogsPerPage, currentPageNo * pBlogsPerPage));
+            }
+        }
+
+        function getNextBlogs (pCallBack, pBlogsPerPage) {
+            if (currentPageNo < pageCount) {
+                currentPageNo = currentPageNo + 1;
+                pCallBack (pageBlogList.slice( (currentPageNo - 1) * pBlogsPerPage, currentPageNo * pBlogsPerPage));
+            }
+        }
+
+        function parseFileName (pFileName) {
+            if (typeof pFileName !== 'string') {
+                throw new Error ('pFileName is not a string');
+            }
+
+            var arr   = pFileName.split('-'),
+                year  = arr.shift(),
+                month = arr.shift(),
+                date  = arr.shift(),
+                slug  = arr.join('-');
+
+            return {
+                year: year,
+                month: month,
+                date: date,
+                slug: slug,
+                formattedDate: months[month - 1] + ' ' + parseInt(date) + ', ' + year
+            }
+        }
 
         function getTags (pCallBack) {
             if (tags.length === 0) {
@@ -25,128 +133,103 @@ angular
             }
         }
 
-        function computePageCount () {
-            var len = pageBlogList.length;
-            return len ? parseInt (len / blogsPerPage) + (len % blogsPerPage === 0 ? 0 : 1) : 1;
-        }
-
-        function getBlogsByTag (pTag, pCallBack) {
-            $http
-                .get('/blogs/tag/' + pTag)
-                .success(function (data) {
-                    pageBlogList = data;
-                    pageCount = computePageCount();
-                    currentPageNo = 1;
-                    if (typeof pCallBack === 'function') {
-                        pCallBack (pageBlogList.slice(0, blogsPerPage));
-                    }
-                })
-                .error(console.error);
-        }
-
-        function getBlogs (pCallBack) {
-            $http
-                .get('/blogs')
-                .success(function (data) {
-                    pageBlogList = data;
-                    pageCount = computePageCount();
-                    currentPageNo = 1;
-                    if (typeof pCallBack === 'function') {
-                        pCallBack (pageBlogList.slice(0, blogsPerPage));
-                    }
-                })
-                .error(console.error);
-        }
-
-        function getBlog (pBlog, pCallBack, pCache) {
-            if (pCache) {
-                pCallBack (currentBlog);
-            }
-            else {
-                $http
-                    .get('/blogs/post/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug)
-                    .success(function (pData) {
-                        currentBlog = pData;
-                        pCallBack(currentBlog);
-                    })
-                    .error(console.error);
-            }
-        }
-
-        function saveBlog (pBlog) {
+        function saveBlog (pBlog, pFn) {
             var isNewBlog = !pBlog.slug || !pBlog.year || !pBlog.month || !pBlog.date;
 
             if (isNewBlog) {
                 $http
-                    .post('/blogs', pBlog.post)
-                    .success(console.log)
-                    .error(console.error);
+                    .post('/api/blogs', pBlog)
+                    .success(function (pData) {
+                        pFn('success', pData);
+                    })
+                    .error(function (pData) {
+                        pFn('error', pData);
+                    });
             }
             else {
                 $http
-                    .put('/blogs/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug)
-                    .success(console.log)
-                    .error(console.error);
+                    .put('/api/blogs/posts/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug, pBlog.post)
+                    .success(function (pData) {
+                        pFn('success', pData);
+                    })
+                    .error(function (pData) {
+                        pFn('error', pData);
+                    });
             }
         }
 
-        function deleteBlog (pBlog) {
+        function deleteBlog (pBlog, pFn) {
             $http
-                .delete('/blogs/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug)
-                .success(console.log)
-                .error(console.error);
+                .delete('/api/blogs/posts/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug)
+                .success(function (pData) {
+                    pFn('success', pData);
+                })
+                .error(function (pData) {
+                    pFn('error', pData);
+                });
         }
 
-        function getPrevBlogs (pCallBack) {
-            if (currentPageNo > 1) {
-                currentPageNo = currentPageNo - 1;
-                pCallBack (pageBlogList.slice( (currentPageNo - 1) * blogsPerPage, currentPageNo * blogsPerPage));
+        function previewBlog (pBlog, pCallBack) {
+
+            pBlog = pBlog || {post: ''};
+
+            pBlog.post = pBlog.post || '';
+
+            var blog = {}, post = pBlog.post.split('\n'), postLen = post.length, i = 1, metaData = [];
+            if (post[0].trim() !== '<!--') {
+                throw new Error ('Incorrect format, missing "<!--"');
             }
-        }
-
-        function getNextBlogs (pCallBack) {
-            if (currentPageNo < pageCount) {
-                currentPageNo = currentPageNo + 1;
-                pCallBack (pageBlogList.slice( (currentPageNo - 1) * blogsPerPage, currentPageNo * blogsPerPage));
+            while (i < postLen) {
+                var line = post[i].trim();
+                if (line === '-->' ) {
+                    break;
+                }
+                if (line === '') {
+                    i = i + 1;
+                    continue;
+                }
+                metaData.push(line);
+                i = i + 1;
             }
-        }
-
-        function parseFileName (pFileName) {
-            if (typeof pFileName !== 'string') {
-                throw new Error ('pFileName is not a string');
+            if (i === postLen) {
+                throw new Error('Incorrect format, missing "-->"');
             }
 
-            var arr   = pFileName.split('-'),
-                year  = arr.shift(),
-                month = arr.shift(),
-                date  = arr.shift(),
-                slug  = arr.join('-');
+            metaData = jsyaml.load(metaData.join('\n')) || {};
 
-            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                'August', 'September', 'October', 'November', 'December'];
+            var publishedDate = metaData['published-date'];
+            publishedDate = months[publishedDate.getMonth()] + ' ' + publishedDate.getDate() +
+                                   ', ' + publishedDate.getFullYear();
+            blog.title = metaData.title;
+            blog.subtitle = metaData.subtitle;
+            blog['published-date'] = publishedDate;
+            blog.post = pBlog.post;
+            blog.tags = [];
 
-            return {
-                year: year,
-                month: month,
-                date: date,
-                slug: slug,
-                formattedDate: months[month - 1] + ' ' + parseInt(date) + ', ' + year
+            metaData.tags = metaData.tags || '';
+
+            var tagsArray = metaData.tags.split(',');
+
+            for (var j in tagsArray) {
+                blog.tags.push(tagsArray[j].trim());
             }
+
+            pCallBack(blog);
         }
 
         return {
-            getCurrentPageNo: function () {  return currentPageNo; },
+            getCurrentPageNo: function () { return currentPageNo; },
             getPageCount: function () { return pageCount; },
             getBlogsByTag: getBlogsByTag,
+            getBlogsByQuery: getBlogsByQuery,
             getBlogs: getBlogs,
             getBlog: getBlog,
-            saveBlog: saveBlog,
-            deleteBlog: deleteBlog,
             getPrevBlogs: getPrevBlogs,
             getNextBlogs: getNextBlogs,
-            getTags: getTags,
             parseFileName: parseFileName,
-            getBlogsPerPage: function () { return blogsPerPage; },
-            setBlogsPerPage: function (pBlogsPerPage) { blogsPerPage = pBlogsPerPage; }
+            getTags: getTags,
+            saveBlog: saveBlog,
+            deleteBlog: deleteBlog,
+            previewBlog: previewBlog
         };
     }]);

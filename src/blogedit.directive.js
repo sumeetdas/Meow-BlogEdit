@@ -16,4 +16,14 @@ angular
                 });
             }
         }
+    }])
+    .directive('youtube', ['$sce', function ($sce) {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" allowfullscreen src="{{url}}"/></div>',
+            link: function (scope, iElem, iAttrs) {
+                scope.url = $sce.trustAsResourceUrl(iAttrs.url);
+            }
+        }
     }]);

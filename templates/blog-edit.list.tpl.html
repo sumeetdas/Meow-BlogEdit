@@ -1,28 +1,66 @@
-<div>
-    <div ng-repeat="blog in blogs">
-        <div class="post-preview" ng-if="blogs">
-            <a href="#" ng-click="goToBlog(blog);">
-                <h2 class="post-title">
-                    {{blog.title}}
-                </h2>
-                <h3 class="post-subtitle" ng-if="blog.subtitle">
-                    {{blog.subtitle}}
-                </h3>
-            </a>
-            <div class="post-meta">Posted by <a ng-href="/#/blogs">{{username}}</a> on {{getFormattedDate(blog)}}</div>
-            <div class="post-meta"><i class="fa fa-tags"></i> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tag/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-7 col-lg-offset-2 col-md-10 col-md-offset-1 blog-main">
+            <div ng-repeat="blog in blogs">
+
+                <div class="post-preview" ng-if="blogs">
+
+                    <h2 class="post-title">
+                        {{blog.title}}
+                    </h2>
+
+                    <h3 class="post-subtitle" ng-if="blog.subtitle">
+                        {{blog.subtitle}}
+                    </h3>
+
+                    <div class="row">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                            <span class="glyphicon glyphicon-pencil" ng-morph-overlay="blogEditSettings" ng-click="loadBlog(blog)" style="font-size: 1.3em; z-index: 0 !important;"></span>
+                        </div>
+                        <div class="col-lg-8 col-md-6 col-sm-4 col-xs-6">
+
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                            <span class="glyphicon glyphicon-remove pull-right" ng-morph-modal="deleteBlogSettings" ng-click="loadBlogToDelete(blog)" style="font-size: 1.3em;"></span>
+                        </div>
+                    </div>
+
+                    <div class="post-meta">Posted by <a ng-href="/#/blogs">{{username}}</a> on {{getFormattedDate(blog)}}</div>
+                    <div class="post-meta"><i class="fa fa-tags"></i> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tags/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
+
+                </div>
+                <hr>
+            </div>
+            <ul class="pager">
+                <li class="previous hvr-sweep-to-right">
+                    <a href="#" ng-if="!isFirstPage()" ng-click="prev()" class="hvr-sweep-to-right">Previous</a>
+                </li>
+                <li class="next">
+                    <a href="#" ng-if="!isLastPage()" ng-click="next()" class="hvr-sweep-to-right">Next</a>
+                </li>
+            </ul>
         </div>
-        <div class="post-preview" ng-if="blogs === [] || !blogs">
-            <h2>No blogs found saaaaaar!</h2>
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            <div class="nav-block affix" style="margin-top: 15px;">
+                <div class="row">
+                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                        <input type="text" class="form-control" ng-model="query" placeholder="Type your query here">
+                    </div>
+                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 center-block">
+                        <button class="btn btn-default center-block" ng-click="search()">Search</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 center-block">
+                        <button class="btn btn-default center-block" ng-morph-overlay="blogEditSettings" ng-click="addBlog()">Add Blog</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <hr>
     </div>
-    <ul class="pager">
-        <li class="previous">
-            <a href="#" ng-if="!isFirstPage()" ng-click="prev()">Previous</a>
-        </li>
-        <li class="next">
-            <a href="#" ng-if="!isLastPage()" ng-click="next()">Next</a>
-        </li>
-    </ul>
 </div>

@@ -3,120 +3,201 @@
  */
 angular
     .module('meow.blog.edit')
-    .controller('BlogEditListCtrl', ['$scope', '$blogEdit', '$state', function ($scope, $blogEdit, $state) {
-        /**
-         * Load blogs on state change
-         * This controller is used by two states and is required to load
-         * blogs based on whether the URL is /blogs/tag/:tag or not.
-         */
-        $scope.$on('$stateChangeSuccess', function loadBlogs () {
-            if (undefined === $state.params.tag) {
-                $blogEdit.getBlogs(function (pData) {
-                    $scope.blogs = pData;
-                });
-            } else {
-                console.log($state.params.tag);
-                $blogEdit.getBlogsByTag($state.params.tag, function (pData) {
-                    $scope.blogs = pData;
-                });
-            }
-        });
+    .controller('BlogEditCtrl', ['$scope', '$blogEdit', '$location', 'meta', '$timeout', function ($scope, $blogEdit, $location, meta, $timeout) {
+
+        $scope.blogToEdit = {};
+
+        $scope.blogToDelete = {};
+
+        $scope.previewBlog = {};
+
+        $scope.verify = {
+            deleteInput: '',
+            deleteDone: false,
+            blogSaved: false,
+            incorrectDeleteInput: false
+        };
+
+        $scope.error = {
+            blogSaved: false,
+            blogDeleted: false
+        };
+
+        $scope.message = {
+            blogSaved: 'The blog has been saved.',
+            blogDeleted: 'The blog has been deleted.'
+        };
+
+        $scope.username = meta.username;
+
         // load next set of blogs
         $scope.next = function () {
             $blogEdit.getNextBlogs(function (data) {
                 $scope.blogs = data;
-            })
+            }, meta.blogsPerPage)
         };
+
         // load previous set of blogs
         $scope.prev = function () {
             $blogEdit.getPrevBlogs(function (data) {
                 $scope.blogs = data;
-            });
+            }, meta.blogsPerPage);
         };
+
         // determine if the current page is the first page of the result list
         $scope.isFirstPage = function () {
             return $blogEdit.getCurrentPageNo() === 1;
         };
+
         // determine if the current page is the last page of the result list
         $scope.isLastPage = function () {
             return $blogEdit.getCurrentPageNo() === $blogEdit.getPageCount();
         };
+
         $scope.getFormattedDate = function (pBlog) {
             return $blogEdit.parseFileName(pBlog.fileName).formattedDate;
         };
-        // function to go to blog.edit state when the title is clicked upon
-        $scope.goToBlog = function (pBlog) {
-            var metaData = $blogEdit.parseFileName(pBlog.fileName);
 
-            $state.go('blog.edit', {
-                year: metaData.year,
-                month: metaData.month,
-                date: metaData.date,
-                slug: metaData.slug
-            });
-        };
-    }])
-    .controller('BlogEditPostCtrl', ['$scope', '$http', '$stateParams', '$blogEdit', function ($scope, $http, $stateParams, $blogEdit) {
-
-        var year = $stateParams.year,
-            month = $stateParams.month,
-            date = $stateParams.date,
-            slug = $stateParams.slug;
-
-        $blogEdit.getBlog({
-            year: year,
-            month: month,
-            date: date,
-            slug: slug
-        }, function (pData) {
-            $scope.blog.post = pData;
-        });
-
-        $scope.revertBlog = function () {
+        $scope.loadBlog = function (pBlog) {
+            var blogParams = $blogEdit.parseFileName(pBlog.fileName);
+            // loads blog
             $blogEdit.getBlog({
-                year: year,
-                month: month,
-                date: date,
-                slug: slug
+                year: blogParams.year,
+                month: blogParams.month,
+                date: blogParams.date,
+                slug: blogParams.slug
             }, function (pData) {
-                $scope.blog.post = pData;
-            }, true);
+                $scope.blogToEdit = pData;
+
+                $scope.getPreviewBlog(pData);
+                // tempBlog = angular.copy(pData);
+            });
         };
 
-        $scope.saveBlog = function () {
+        $scope.deleteBlog = function (pBlog) {
+
+            // console.log(pBlog.title, $scope.verify.deleteInput);
+            if ($scope.verify.deleteInput !== pBlog.title)
+            {
+                $scope.verify.deleteDone = false;
+                $scope.verify.incorrectDeleteInput = true;
+                return;
+            }
+
+            pBlog = $blogEdit.parseFileName(pBlog.fileName);
+
+            $blogEdit.deleteBlog(pBlog,
+                function (pStatus, pData) {
+                    if ('success' === pStatus)
+                    {
+                        $scope.verify.deleteDone = true;
+                    }
+                    else if ('error' === pStatus)
+                    {
+                        $scope.verify.deleteDone = false;
+                        $scope.error.deleteDone = true;
+                        $scope.message.blogDeleted = 'Error ' + (pData ? pData : '');
+                    }
+                }
+            );
+        };
+
+        $scope.saveBlog = function (pBlog) {
+
+            console.log(pBlog);
+
+            var dateObject = $blogEdit.parseFileName(pBlog.fileName);
+
             $blogEdit.saveBlog({
-                post: $scope.blog.post,
-                year: year,
-                month: month,
-                date: date,
-                slug: slug
+                post: pBlog.post,
+                year: dateObject.year,
+                month: dateObject.month,
+                date: dateObject.date,
+                slug: pBlog.slug
+            }, function (pStatus, pData) {
+                if ('success' == pStatus)
+                {
+                    $scope.verify.blogSaved = true;
+                }
+                else if ('error' == pStatus)
+                {
+                    $scope.verify.blogSaved = false;
+                    $scope.error.blogSaved = true;
+                    $scope.message.blogSaved = 'Error ' + (pData ? pData : '');
+                }
             });
         };
 
-        $scope.deleteBlog = function () {
-            $blogEdit.deleteBlog({
-                year: year,
-                month: month,
-                date: date,
-                slug: slug
+        $scope.getPreviewBlog = function (pBlog) {
+            $scope.verify.blogSaved = false;
+            pBlog.title = pBlog.title || '';
+            pBlog.slug = pBlog.slug || pBlog.title.toLocaleLowerCase().replace(/[\W]/g, '-').replace(/[\-]{2,}/g, '-');
+            $blogEdit.previewBlog(pBlog, function (pPreviewBlog) {
+                $scope.previewBlog = pPreviewBlog;
             });
+        };
+
+        $scope.blogEditSettings = {
+            closeEl: '.close',
+            overlay: {
+                templateUrl: 'blog-edit.post.tpl.html'
+            }
+        };
+
+        $scope.deleteBlogSettings = {
+            closeEl: '.close',
+            modal: {
+                templateUrl: 'blog-edit.delete.tpl.html'
+            }
+        };
+
+        $scope.search = function () {
+            $location.url('/blogs/query/' + $scope.query);
+        };
+
+        $scope.purgeEditScopeVar = function () {
+            $timeout(function () {
+                $scope.blogToEdit = {};
+                $scope.previewBlog = {};
+                $scope.verify.blogSaved = false;
+                $scope.error.blogSaved = false;
+                $scope.message.blogSaved = 'The blog has been saved';
+            }, 2000);
+        };
+
+        $scope.purgeDeleteScopeVar = function () {
+            $timeout(function () {
+                $scope.blogToDelete = {};
+                $scope.verify.deleteDone = false;
+                $scope.error.deleteDone = false;
+                $scope.verify.deleteInput = '';
+                $scope.verify.incorrectDeleteInput = false;
+                $scope.message.blogDeleted = 'The blog has been deleted';
+            }, 2000);
+        };
+
+        $scope.loadBlogToDelete = function(pBlog) {
+            $scope.blogToDelete = pBlog;
+        };
+
+        $scope.addBlog = function () {
+
+            $scope.blogToEdit = {};
+
+            var date = new Date(); //publishedDate.getMonth()
+
+            $scope.blogToEdit.date = date.getDate();
+            $scope.blogToEdit.month = date.getMonth();
+            $scope.blogToEdit.year = date.getYear();
+            $scope.blogToEdit.slug = 'new-post';
+
+            var publishedDate = [date.getFullYear(), date.getMonth(), date.getDate()].join('-');
+
+            var array = ['<!--', 'published-date: ' + publishedDate, 'title: New Post', 'subtitle: ', 'tags: ', 'keywords: ',
+                        '-->', 'Write your post here...'];
+
+            $scope.blogToEdit.post = array.join('\n');
+
+            $scope.getPreviewBlog($scope.blogToEdit);
         }
-    }])
-    .controller('BlogEditPostSideCtrl', [function () {
-
-    }])
-    .controller('BlogEditCtrl', ['$blogEdit', '$scope', '$state', function ($blogEdit, $scope, $state) {
-        // needed for ui select
-        $scope.queryTag = {};
-
-        // loads tags
-        $blogEdit.getTags (function (data) {
-            $scope.tags = data;
-        });
-
-        $scope.getBlogsByTag = function (pTag) {
-            $state.go('blog.list.tag', {
-                tag: pTag
-            });
-        };
     }]);
