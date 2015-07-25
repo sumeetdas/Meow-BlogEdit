@@ -148,7 +148,7 @@ angular
             }
             else {
                 $http
-                    .put('/api/blogs/posts/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug, pBlog.post)
+                    .put('/api/blogs/posts/' + pBlog.year + '/' + pBlog.month + '/' + pBlog.date + '/' + pBlog.slug, pBlog)
                     .success(function (pData) {
                         pFn('success', pData);
                     })

@@ -3,7 +3,8 @@
  */
 angular
     .module('meow.blog.edit')
-    .controller('BlogEditCtrl', ['$scope', '$blogEdit', '$location', 'meta', '$timeout', function ($scope, $blogEdit, $location, meta, $timeout) {
+    .controller('BlogEditCtrl', ['$scope', '$blogEdit', '$location', 'meta', '$timeout', '$route',
+        function ($scope, $blogEdit, $location, meta, $timeout, $route) {
 
         $scope.blogToEdit = {};
 
@@ -130,8 +131,12 @@ angular
 
         $scope.getPreviewBlog = function (pBlog) {
             $scope.verify.blogSaved = false;
+
+            // needed for new blog post
             pBlog.title = pBlog.title || '';
             pBlog.slug = pBlog.slug || pBlog.title.toLocaleLowerCase().replace(/[\W]/g, '-').replace(/[\-]{2,}/g, '-');
+            pBlog.fileName = pBlog.fileName || '';
+
             $blogEdit.previewBlog(pBlog, function (pPreviewBlog) {
                 $scope.previewBlog = pPreviewBlog;
             });
@@ -156,16 +161,26 @@ angular
         };
 
         $scope.purgeEditScopeVar = function () {
+
+            if ($scope.verify.blogSaved) {
+                $route.reload();
+            }
+
             $timeout(function () {
                 $scope.blogToEdit = {};
                 $scope.previewBlog = {};
                 $scope.verify.blogSaved = false;
                 $scope.error.blogSaved = false;
                 $scope.message.blogSaved = 'The blog has been saved';
-            }, 2000);
+            }, 1000);
         };
 
         $scope.purgeDeleteScopeVar = function () {
+
+            if ($scope.verify.deleteDone) {
+                $route.reload();
+            }
+
             $timeout(function () {
                 $scope.blogToDelete = {};
                 $scope.verify.deleteDone = false;
@@ -173,7 +188,7 @@ angular
                 $scope.verify.deleteInput = '';
                 $scope.verify.incorrectDeleteInput = false;
                 $scope.message.blogDeleted = 'The blog has been deleted';
-            }, 2000);
+            }, 1000);
         };
 
         $scope.loadBlogToDelete = function(pBlog) {

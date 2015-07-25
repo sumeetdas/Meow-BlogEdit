@@ -9,30 +9,30 @@
                         {{blog.title}}
                     </h2>
 
-                    <h3 class="post-subtitle" ng-if="blog.subtitle">
+                    <em class="post-subtitle" ng-if="blog.subtitle">
                         {{blog.subtitle}}
-                    </h3>
+                    </em>
 
                     <div class="row">
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                            <span class="glyphicon glyphicon-pencil" ng-morph-overlay="blogEditSettings" ng-click="loadBlog(blog)" style="font-size: 1.3em; z-index: 0 !important;"></span>
+                            <span class="glyphicon glyphicon-pencil text-success" ng-morph-overlay="blogEditSettings" ng-click="loadBlog(blog)" style="font-size: 1.3em; z-index: 0 !important; cursor: hand;"></span>
                         </div>
                         <div class="col-lg-8 col-md-6 col-sm-4 col-xs-6">
 
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                            <span class="glyphicon glyphicon-remove pull-right" ng-morph-modal="deleteBlogSettings" ng-click="loadBlogToDelete(blog)" style="font-size: 1.3em;"></span>
+                            <span class="glyphicon glyphicon-remove text-danger pull-right" ng-morph-modal="deleteBlogSettings" ng-click="loadBlogToDelete(blog)" style="font-size: 1.3em; cursor: hand;"></span>
                         </div>
                     </div>
 
                     <div class="post-meta">Posted by <a ng-href="/#/blogs">{{username}}</a> on {{getFormattedDate(blog)}}</div>
-                    <div class="post-meta"><i class="fa fa-tags"></i> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tags/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
+                    <div class="post-meta"><span class="glyphicon glyphicon-tags text-info" style="margin-right:5px;"></span> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tags/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
 
                 </div>
                 <hr>
             </div>
             <ul class="pager">
-                <li class="previous hvr-sweep-to-right">
+                <li class="previous">
                     <a href="#" ng-if="!isFirstPage()" ng-click="prev()" class="hvr-sweep-to-right">Previous</a>
                 </li>
                 <li class="next">
@@ -43,21 +43,21 @@
         <div class="col-lg-3 col-md-6 col-xs-12">
             <div class="nav-block affix" style="margin-top: 15px;">
                 <div class="row">
-                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                         <input type="text" class="form-control" ng-model="query" placeholder="Type your query here">
                     </div>
                     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 center-block">
-                        <button class="btn btn-default center-block" ng-click="search()">Search</button>
+                        <button class="btn btn-default center-block hvr-sweep-to-right" ng-click="search()">Search</button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <hr>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 center-block">
-                        <button class="btn btn-default center-block" ng-morph-overlay="blogEditSettings" ng-click="addBlog()">Add Blog</button>
+                        <button class="btn btn-default center-block hvr-sweep-to-right" ng-morph-overlay="blogEditSettings" ng-click="addBlog()">Add Blog</button>
                     </div>
                 </div>
             </div>
