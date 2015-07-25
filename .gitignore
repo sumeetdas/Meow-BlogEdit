@@ -4,3 +4,4 @@ _uploads/*
 bower_components/*
 public/*
 ./index.js
+.idea/*
