@@ -38,7 +38,7 @@ gulp.task('build-less', function () {
 gulp.task('build-src', function () {
     return gulp
         .src(['src/blogedit.js', 'src/blogedit.service.js', 'src/blogedit.directive.js',
-            'src/blogedit.controllers.js', 'src/templates.js'])
+            'src/blogedit.controllers.js', 'dev_dump/templates.js'])
         .pipe(concat('blogedit.js'))
         .pipe(gulp.dest('dev_dump'));
 });
