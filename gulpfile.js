@@ -61,7 +61,7 @@ gulp.task('build-combo-bundle', function () {
             'bower_components/angular-marked/angular-marked.min.js',
             'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/angular-morph/dist/angular-morph.js',
-            'dist/blogedit.js'])
+            'dev_dump/blogedit.js'])
         .pipe(concat('blogedit.combo.js'))
         .pipe(gulp.dest('dev_dump'));
 });
@@ -70,7 +70,7 @@ gulp.task('build-combo-css-bundle', function () {
     return gulp
         .src([
             'bower_components/bootstrap-css-only/css/bootstrap.css',
-            'dist/*.css'
+            'dev_dump/*.css'
         ])
         .pipe(concat('blogedit.combo.css'))
         .pipe(gulp.dest('dev_dump'));
