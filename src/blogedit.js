@@ -29,21 +29,21 @@ angular
         }];
 
         $routeProvider
-            .when('/blogs', {
+            .when('/blogs/edit', {
                 controller: 'BlogEditCtrl',
                 templateUrl: 'blog-edit.list.tpl.html',
                 resolve: {
                     meta: metaArray
                 }
             })
-            .when('/blogs/tag/:tag', {
+            .when('/blogs/edit/tag/:tag', {
                 controller: 'BlogEditCtrl',
                 templateUrl: 'blog-edit.list.tpl.html',
                 resolve: {
                     meta: metaArray
                 }
             })
-            .when('/blogs/query/:query', {
+            .when('/blogs/edit/query/:query', {
                 controller: 'BlogEditCtrl',
                 templateUrl: 'blog-edit.list.tpl.html',
                 resolve: {
