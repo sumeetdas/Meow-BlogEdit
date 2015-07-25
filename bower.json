@@ -18,11 +18,9 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "*",
+    "!dist",
+    "!dist/*"
   ],
   "dependencies": {
     "angular-marked": "~0.0.12",

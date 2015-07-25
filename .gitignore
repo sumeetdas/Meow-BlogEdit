@@ -5,3 +5,4 @@ bower_components/*
 public/*
 ./index.js
 .idea/*
+dev_dump/*

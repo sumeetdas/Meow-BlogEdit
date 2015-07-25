@@ -1,5 +1,5 @@
 {
-  "name": "Meow-BlogEditor",
+  "name": "Meow-BlogEdit",
   "version": "0.0.1",
   "description": "Blog editor for Meow blogging engine",
   "main": "gulpfile.js",
@@ -24,6 +24,8 @@
     "gulp-clean": "^0.3.1",
     "gulp-concat": "^2.5.2",
     "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.1.0",
     "gulp-watch": "^4.2.4",
     "moment": "^2.10.3",
