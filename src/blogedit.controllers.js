@@ -157,8 +157,12 @@ angular
         };
 
         $scope.search = function () {
-            $location.url('/blogs/query/' + $scope.query);
+            $location.url('/query/' + $scope.query);
         };
+
+        $scope.searchOnEnter = function () {
+
+        }
 
         $scope.purgeEditScopeVar = function () {
 
@@ -188,7 +192,7 @@ angular
                 $scope.verify.deleteInput = '';
                 $scope.verify.incorrectDeleteInput = false;
                 $scope.message.blogDeleted = 'The blog has been deleted';
-            }, 1000);
+            }, 400);
         };
 
         $scope.loadBlogToDelete = function(pBlog) {

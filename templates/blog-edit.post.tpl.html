@@ -1,7 +1,7 @@
 <div class="container" style="background-color:#f8f8ff;" id="post-edit">
     <div class="row" style="margin-top: 10px;">
         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-            <span class="glyphicon glyphicon-floppy-disk text-success" ng-click="saveBlog(blogToEdit)" style="font-size: 1.8em; margin-left: -20px;"></span>
+            <span class="glyphicon glyphicon-floppy-disk text-success" ng-click="saveBlog(blogToEdit)" style="font-size: 1.8em; margin-left: -20px;" title="Save Blog"></span>
         </div>
         <div class="col-lg-8 col-md-6 col-sm-4 col-xs-12 text-center">
             <span style="font-family: avenir, 'avenir next', helvetica,arial, sans-serif;" ng-if="verify.blogSaved || error.blogSaved" ng-class="verify.blogSaved ? 'text-success' : 'text-danger'">
@@ -9,7 +9,7 @@
             </span>
         </div>
         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-            <span class="pull-right glyphicon glyphicon-remove text-danger close" ng-click="purgeEditScopeVar()" style="font-size: 1.8em; margin-right: -20px;"></span>
+            <span class="pull-right glyphicon glyphicon-remove text-danger close" ng-click="purgeEditScopeVar()" style="font-size: 1.8em; margin-right: -20px;" title="Close"></span>
         </div>
     </div>
 
@@ -38,8 +38,8 @@
                     </em>
                     <div post="previewBlog.post"></div>
                     <br>
-                    <em class="post-meta">Posted by <a class="tag-link">{{username}}</a> on {{previewBlog['published-date']}}</em>
-                    <div class="post-meta"><span class="glyphicon glyphicon-tags" style="margin-right:5px;"><em ng-repeat="tag in previewBlog.tags"><a class="tag-link">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
+                    <em class="post-meta">Posted by <a class="tag-link" title="{{username}}">{{username}}</a> on {{previewBlog['published-date']}}</em>
+                    <div class="post-meta"><span class="glyphicon glyphicon-tags" style="margin-right:5px;"><em ng-repeat="tag in previewBlog.tags" style="margin-left: 10px;"><a class="tag-link" title="{{tag}}">{{tag}}</a>{{$last ? '' : ','}}</em></div>
                 </div>
             </div>
         </div>
