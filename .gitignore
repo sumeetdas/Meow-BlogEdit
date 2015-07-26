@@ -1,8 +1,9 @@
-node_modules/*
-_posts/*
-_uploads/*
-bower_components/*
-public/*
-./index.js
-.idea/*
-dev_dump/*
+*
+!dist
+!src
+!templates
+!tests
+!./bower.json
+!./gulpfile.js
+!./LICENSE
+!/.package.json
