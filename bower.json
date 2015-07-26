@@ -18,12 +18,9 @@
   ],
   "license": "MIT",
   "ignore": [
-    "less",
-    "src",
-    "templates",
-    "tests",
-    "./gulpfile.js",
-    "./package.json"
+    "*",
+    "!dist",
+    "!dist/**"
   ],
   "dependencies": {
     "angular-marked": "~0.0.12",
