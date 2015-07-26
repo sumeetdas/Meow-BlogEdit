@@ -1,6 +1,9 @@
 /**
  * Created by sumedas on 30-Mar-15.
  */
+
+require('shelljs/global');
+
 var gulp             = require('gulp'),
     runSequence      = require('run-sequence'),
     clean            = require('del'),
@@ -9,7 +12,6 @@ var gulp             = require('gulp'),
     uglify           = require('gulp-uglify'),
     minifyCss        = require('gulp-minify-css'),
     rename           = require('gulp-rename'),
-    exec             = require('child_process').exec,
     watch            = require('gulp-watch'),
     less             = require('gulp-less');
 
@@ -43,14 +45,6 @@ gulp.task('build-src', function () {
         .pipe(gulp.dest('dev_dump'));
 });
 
-/*gulp.task('build-bundle', function () {
-    return gulp
-        .src(['dist/blogedit.js'])
-        .pipe(concat('blogedit.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('dist'));
-});*/
-
 gulp.task('build-combo-bundle', function () {
     return gulp
         .src([
@@ -76,12 +70,6 @@ gulp.task('build-combo-css-bundle', function () {
         .pipe(gulp.dest('dev_dump'));
 });
 
-/*gulp.task('default', function () {
-    runSequence('clean', 'build-templates', 'build-less', 'build-src', 'build-bundle', function () {
-        console.log('gulp tasks done!');
-    });
-});*/
-
 gulp.task('minify-js', function () {
     return gulp
         .src(['dev_dump/blogedit.combo.js', 'dev_dump/blogedit.js'])
@@ -99,12 +87,13 @@ gulp.task('minify-css', function () {
         .pipe(rename({
             extname: '.min.css'
         }))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('minify-all', function () {
     runSequence('minify-js', 'minify-css', function () {
-        exec('cp ~/Meow-BlogEdit/dist/* ~/Meow-BlogEdit/public');
+        mkdir('-p', './dist/fonts');
+        cp('./bower_components/bootstrap-css-only/fonts/*', './dist/fonts');
         console.log('minification done!');
     });
 });
