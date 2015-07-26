@@ -206,9 +206,9 @@ angular
             var date = new Date(); //publishedDate.getMonth()
 
             $scope.blogToEdit.date = date.getDate();
-            $scope.blogToEdit.month = date.getMonth();
+            $scope.blogToEdit.month = date.getMonth() + 1;
             $scope.blogToEdit.year = date.getYear();
-            $scope.blogToEdit.slug = 'new-post';
+            //$scope.blogToEdit.slug = 'new-post';
 
             var publishedDate = [date.getFullYear(), date.getMonth(), date.getDate()].join('-');
 
