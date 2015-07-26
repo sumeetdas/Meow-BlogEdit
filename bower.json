@@ -19,6 +19,7 @@
   "license": "MIT",
   "ignore": [
     "*",
+    "!dist",
     "!dist/**" ],
   "dependencies": {
     "angular-marked": "~0.0.12",
