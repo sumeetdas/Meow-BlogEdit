@@ -1,6 +1,7 @@
 *
 !dist
 !src
+!less
 !templates
 !tests
 !./bower.json
