@@ -20,7 +20,9 @@
   "ignore": [
     "*",
     "!dist",
-    "!dist/*"
+    "!dist/*",
+    "!dist/css/*",
+    "!dist/fonts/*"
   ],
   "dependencies": {
     "angular-marked": "~0.0.12",
