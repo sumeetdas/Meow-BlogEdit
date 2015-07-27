@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-7 col-lg-offset-2 col-md-10 col-md-offset-1 blog-main">
+        <div class="col-lg-7 col-lg-offset-2 col-md-12 blog-main">
             <div ng-repeat="blog in blogs">
 
                 <div class="post-preview" ng-if="blogs">
@@ -14,24 +14,24 @@
                     </em>
 
                     <div class="row">
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                             <span class="glyphicon glyphicon-pencil text-success" ng-morph-overlay="blogEditSettings" ng-click="loadBlog(blog)" style="z-index: 0 !important; cursor: hand;"  title="Edit blog"></span>
                         </div>
-                        <div class="col-lg-8 col-md-6 col-sm-4 col-xs-6">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 
                         </div>
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                             <span class="glyphicon glyphicon-remove text-danger pull-right" ng-morph-modal="deleteBlogSettings" ng-click="loadBlogToDelete(blog)" style="cursor: hand;" title="Delete blog"></span>
                         </div>
                     </div>
 
                     <div class="post-meta">Posted by <a ng-href="/blogs/edit/#/">{{username}}</a> on {{getFormattedDate(blog)}}</div>
-                    <div class="post-meta"><span class="glyphicon glyphicon-tags text-info" style="margin-right:5px;"></span> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/#/blogs/tags/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
+                    <div class="post-meta"><span class="glyphicon glyphicon-tags text-info" style="margin-right:5px;"></span> <em ng-repeat="tag in blog.tags"><a class="tag-link" ng-href="/blogs/edit#/tag/{{tag}}">{{tag}}</a>{{$last ? '' : ', '}}</em></div>
 
                 </div>
                 <hr>
             </div>
-            <ul class="pager">
+            <ul class="pager" style="margin-bottom: 25px;">
                 <li class="previous">
                     <a ng-if="!isFirstPage()" ng-click="prev()" style="cursor: hand;" title="View previous page">Previous</a>
                 </li>
@@ -40,13 +40,13 @@
                 </li>
             </ul>
         </div>
-        <div class="col-lg-3 col-md-6 col-xs-12" style="margin-top: 15px;">
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12" style="margin-top: 15px;">
             <div class="row">
-                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                    <input type="text" class="form-control" ng-model="query" placeholder="Type your query here" ng-keypress="$event.keyCode === 13 ? search() : angular.noop()">
+                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                    <input type="text" class="form-control" ng-model="query" placeholder="Query" ng-keypress="$event.keyCode === 13 ? search() : angular.noop()">
                 </div>
-                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 center-block">
-                    <button class="btn btn-default center-block hvr-sweep-to-right" ng-click="search()" title="Search {{query ? '\'' + query + '\'' : 'something'}}">Search</button>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 center-block">
+                    <button class="btn btn-default center-block" ng-click="search()" title="Search {{query ? '\'' + query + '\'' : 'something'}}">Search</button>
                 </div>
             </div>
             <div class="row">
@@ -55,15 +55,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 center-block">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 center-block">
                     <button class="btn btn-default center-block" ng-morph-overlay="blogEditSettings" ng-click="addBlog()" title="Add new blog">Add Blog</button>
                 </div>
-                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 center-block">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6 center-block">
                 </div>
-                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 center-block pull-right">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 center-block pull-right">
                     <a href="/blogs/edit/logout" class="btn btn-default" role="button" title="Logout"><span class="glyphicon glyphicon-log-out"></span></a>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+            <p style="font-size: medium">Powered by <a href="https://github.com/sumeetdas1992/Meow" target="_blank">Meow</a></p>
         </div>
     </div>
 </div>

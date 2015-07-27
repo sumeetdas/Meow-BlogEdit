@@ -1,5 +1,5 @@
 <div class="deleteModal">
-    <!-- style="font-size: 1.3em; margin-top: 20px;" -->
+
     <span class="glyphicon glyphicon-remove close" ng-click="purgeDeleteScopeVar()" ></span>
 
     <div ng-if="!verify.deleteDone && !error.deleteDone" style="margin-top: 35px;">
@@ -14,7 +14,7 @@
         <button class="btn btn-danger" ng-click="deleteBlog(blogToDelete)" style="width: 100%; margin-top: 15px;">Delete this blog</button>
     </div>
 
-    <div ng-if="verify.deleteDone || error.deleteDone">
-        <h4 ng-class="verify.deleteDone ? 'text-success' : 'text-danger'">{{message.blogDeleted}}</h4>
+    <div ng-if="verify.deleteDone || error.deleteDone" style="margin-top: 45px;">
+        <h3 ng-class="verify.deleteDone ? 'text-success' : 'text-danger'">{{message.blogDeleted}}</h3>
     </div>
 </div>

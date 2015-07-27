@@ -11,6 +11,7 @@ var gulp             = require('gulp'),
     concat           = require('gulp-concat'),
     uglify           = require('gulp-uglify'),
     minifyCss        = require('gulp-minify-css'),
+    minifyHTML       = require('gulp-minify-html'),
     rename           = require('gulp-rename'),
     watch            = require('gulp-watch'),
     less             = require('gulp-less');
@@ -22,6 +23,11 @@ gulp.task('clean', function (cb) {
 gulp.task('build-templates', function () {
     return gulp
         .src('templates/**/*.tpl.html')
+        .pipe(minifyHTML({
+            empty: true,
+            quotes: true,
+            loose: true
+        }))
         .pipe(templateCache({
             standalone: true,
             module: 'blogEditTemplates'

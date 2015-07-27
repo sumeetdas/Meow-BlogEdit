@@ -630,9 +630,65 @@ body {
 
 .deleteModal {
   background: #f8f8ff;
-  width: 400px;
+  width: 340px;
   height: 340px;
   color: #F0F1F0;
   font-weight: bold;
   padding: 20px 20px 20px 20px;
+}
+
+// mobile edit mode
+// https://proto.io/freebies/onoff/
+
+.onoffswitch {
+  position: relative; width: 110px;
+  -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+  display: none;
+}
+.onoffswitch-label {
+  display: block; overflow: hidden; cursor: pointer;
+  border: 2px solid #999999; border-radius: 20px;
+}
+
+.onoffswitch-inner {
+  display: block; width: 200%; margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+  &:before, &:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+  }
+  &:before {
+    content: "EDIT";
+    padding-left: 10px;
+    background-color: #34A7C1; color: #FFFFFF;
+  }
+  &:after {
+    content: "PREVIEW";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+  }
+}
+
+.onoffswitch-switch {
+  display: block; width: 17px; margin: 6.5px;
+  background: #FFFFFF;
+  position: absolute; top: 0; bottom: 0;
+  right: 76px;
+  border: 2px solid #999999; border-radius: 20px;
+  transition: all 0.3s ease-in 0s;
+}
+
+// http://stackoverflow.com/questions/1139763/what-does-the-plus-sign-css-selector-mean - 2nd answer 2nd comment
+// h1+p matches <h1></h1><p><p/>
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+  .onoffswitch-inner {
+    margin-left: 0;
+  }
+  .onoffswitch-switch {
+    right: 0px;
+  }
 }
