@@ -2,7 +2,7 @@
     <!-- style="font-size: 1.3em; margin-top: 20px;" -->
     <span class="glyphicon glyphicon-remove close" ng-click="purgeDeleteScopeVar()" ></span>
 
-    <div ng-if="!verify.deleteDone" style="margin-top: 35px;">
+    <div ng-if="!verify.deleteDone && !error.deleteDone" style="margin-top: 35px;">
         <p class="text-info" style="margin-top: 10px;">To permanently delete the blog, please enter its name.</p>
 
         <p class="text-danger lead">{{blogToDelete.title}}</p>

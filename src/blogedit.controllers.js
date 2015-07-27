@@ -92,12 +92,13 @@ angular
                     if ('success' === pStatus)
                     {
                         $scope.verify.deleteDone = true;
+                        $scope.message.blogDeleted = 'The blog has been deleted.';
                     }
                     else if ('error' === pStatus)
                     {
                         $scope.verify.deleteDone = false;
                         $scope.error.deleteDone = true;
-                        $scope.message.blogDeleted = 'Error ' + (pData ? pData : '');
+                        $scope.message.blogDeleted = 'Error - ' + (pData ? pData : '');
                     }
                 }
             );
@@ -105,7 +106,7 @@ angular
 
         $scope.saveBlog = function (pBlog) {
 
-            console.log(pBlog);
+            // console.log(pBlog);
 
             var dateObject = $blogEdit.parseFileName(pBlog.fileName);
 
@@ -119,12 +120,13 @@ angular
                 if ('success' == pStatus)
                 {
                     $scope.verify.blogSaved = true;
+                    $scope.message.blogSaved = 'The blog has been saved.';
                 }
                 else if ('error' == pStatus)
                 {
                     $scope.verify.blogSaved = false;
                     $scope.error.blogSaved = true;
-                    $scope.message.blogSaved = 'Error ' + (pData ? pData : '');
+                    $scope.message.blogSaved = 'Error - ' + (pData ? pData : '');
                 }
             });
         };
@@ -159,10 +161,6 @@ angular
         $scope.search = function () {
             $location.url('/query/' + $scope.query);
         };
-
-        $scope.searchOnEnter = function () {
-
-        }
 
         $scope.purgeEditScopeVar = function () {
 
@@ -210,7 +208,7 @@ angular
             $scope.blogToEdit.year = date.getYear();
             //$scope.blogToEdit.slug = 'new-post';
 
-            var publishedDate = [date.getFullYear(), date.getMonth(), date.getDate()].join('-');
+            var publishedDate = [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-');
 
             var array = ['<!--', 'published-date: ' + publishedDate, 'title: New Post', 'subtitle: ', 'tags: ', 'keywords: ',
                         '-->', 'Write your post here...'];
