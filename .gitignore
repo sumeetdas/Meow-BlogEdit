@@ -5,4 +5,4 @@ bower_components
 dev_dump
 node_modules
 public
-./index.js
+/index.js
